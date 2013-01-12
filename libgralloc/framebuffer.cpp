@@ -304,6 +304,17 @@ int mapFrameBufferLocked(struct private_module_t* module)
               info.yres_virtual, info.yres*2);
     }
 
+	if (property_get("debug.gr.pageflip", property, NULL) > 0) {
+	int num = atoi(property);
+	if (num > 0) {
+		flags = PAGE_FLIP;
+		ALOGW("Page Flipping force enabled");
+	} else {
+		flags = 0;
+		ALOGW("Page Flipping force disabled");
+		}
+	}
+
     if (ioctl(fd, FBIOGET_VSCREENINFO, &info) == -1)
         return -errno;
 
